@@ -1,0 +1,495 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Body Health Map - HealthMate</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .body-map-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 25px;
+        }
+
+        .body-map-card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 4px 18px rgba(0,0,0,.06);
+        }
+
+        .body-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .body-tabs button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: #e4eee8;
+            color: #355b49;
+        }
+
+        .body-tabs button.active {
+            background: #668c76;
+            color: white;
+        }
+
+        .body-illustration {
+            display: block;
+            width: 100%;
+            max-width: 340px;
+            height: auto;
+            margin: auto;
+        }
+
+        .body-part {
+            fill: #dce9e1;
+            stroke: #668c76;
+            stroke-width: 2;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .body-part:hover {
+            fill: #a9cbb5;
+        }
+
+        .body-part.selected {
+            fill: #e45b5b;
+            stroke: #a52d2d;
+        }
+
+        .body-form {
+            margin-top: 25px;
+        }
+
+        .body-form input,
+        .body-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 18px;
+            border: 1px solid #d5e0d9;
+            border-radius: 9px;
+            box-sizing: border-box;
+        }
+
+        .body-form textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .body-submit {
+            background: #668c76;
+            color: white;
+            padding: 13px 22px;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+        }
+
+        .body-history {
+            margin-top: 25px;
+            padding: 18px;
+            background: #f3f8f4;
+            border-radius: 12px;
+        }
+
+        .body-history-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #dce9e1;
+        }
+
+        .body-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .body-success {
+            background: #e3f3e8;
+            color: #28613d;
+        }
+
+        .body-error {
+            background: #fde8e8;
+            color: #a52d2d;
+        }
+
+        .body-history-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.btn-edit {
+    background: #668c76;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 7px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-delete {
+    background: #d9534f;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+}
+
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>HealthMate</h2>
+    <a href="{{ url_for('dashboard') }}">Kembali ke Dashboard</a>
+</header>
+
+<main class="body-map-container">
+
+    <div class="body-map-card">
+
+        <h2>Body Health Map</h2>
+
+        <p>
+            Pilih bagian tubuh yang ingin kamu catat keluhannya.
+        </p>
+
+        {% if pesan_sukses %}
+            <div class="body-message body-success">
+                {{ pesan_sukses }}
+            </div>
+        {% endif %}
+
+        {% if pesan_error %}
+            <div class="body-message body-error">
+                {{ pesan_error }}
+            </div>
+        {% endif %}
+
+        <div class="body-tabs">
+            <button type="button"
+                    id="frontButton"
+                    class="active"
+                    onclick="changeSide('depan')">
+                Tampak Depan
+            </button>
+
+            <button type="button"
+                    id="backButton"
+                    onclick="changeSide('belakang')">
+                Tampak Belakang
+            </button>
+        </div>
+
+        <p style="text-align:center;">
+            <strong id="sideTitle">Tampak Depan</strong>
+        </p>
+
+        <svg class="body-illustration"
+             viewBox="0 0 320 440"
+             xmlns="http://www.w3.org/2000/svg">
+
+            <!-- TUBUH TAMPAK DEPAN -->
+            <g id="frontBody">
+
+                <circle class="body-part"
+                        data-part="Kepala"
+                        cx="160" cy="48" r="27"/>
+
+                <rect class="body-part"
+                      data-part="Leher"
+                      x="146" y="75"
+                      width="28" height="20"
+                      rx="7"/>
+
+                <path class="body-part"
+                      data-part="Dada"
+                      d="M125 95 L195 95
+                         L210 180 L110 180 Z"/>
+
+                <path class="body-part"
+                      data-part="Perut"
+                      d="M110 180 L210 180
+                         L205 235 L115 235 Z"/>
+
+                <path class="body-part"
+                      data-part="Lengan Kiri"
+                      d="M125 98 L105 105
+                         L72 205 L90 213
+                         L125 145 Z"/>
+
+                <path class="body-part"
+                      data-part="Lengan Kanan"
+                      d="M195 98 L215 105
+                         L248 205 L230 213
+                         L195 145 Z"/>
+
+                <path class="body-part"
+                      data-part="Tangan Kiri"
+                      d="M72 205 L90 213
+                         L86 240 L65 237 Z"/>
+
+                <path class="body-part"
+                      data-part="Tangan Kanan"
+                      d="M230 213 L248 205
+                         L255 237 L234 240 Z"/>
+
+                <path class="body-part"
+                      data-part="Paha Kiri"
+                      d="M115 235 L160 235
+                         L155 330 L110 330 Z"/>
+
+                <path class="body-part"
+                      data-part="Paha Kanan"
+                      d="M160 235 L205 235
+                         L210 330 L165 330 Z"/>
+
+                <path class="body-part"
+                      data-part="Kaki Kiri"
+                      d="M110 330 L155 330
+                         L150 400 L110 400 Z"/>
+
+                <path class="body-part"
+                      data-part="Kaki Kanan"
+                      d="M165 330 L210 330
+                         L210 400 L170 400 Z"/>
+
+            </g>
+
+            <!-- TUBUH TAMPAK BELAKANG -->
+            <g id="backBody" style="display:none;">
+
+                <circle class="body-part"
+                        data-part="Kepala Belakang"
+                        cx="160" cy="48" r="27"/>
+
+                <rect class="body-part"
+                      data-part="Leher Belakang"
+                      x="146" y="75"
+                      width="28" height="20"
+                      rx="7"/>
+
+                <path class="body-part"
+                      data-part="Punggung Atas"
+                      d="M125 95 L195 95
+                         L210 180 L110 180 Z"/>
+
+                <path class="body-part"
+                      data-part="Punggung Bawah"
+                      d="M110 180 L210 180
+                         L205 235 L115 235 Z"/>
+
+                <path class="body-part"
+                      data-part="Lengan Kiri Belakang"
+                      d="M125 98 L105 105
+                         L72 205 L90 213
+                         L125 145 Z"/>
+
+                <path class="body-part"
+                      data-part="Lengan Kanan Belakang"
+                      d="M195 98 L215 105
+                         L248 205 L230 213
+                         L195 145 Z"/>
+
+                <path class="body-part"
+                      data-part="Tangan Kiri Belakang"
+                      d="M72 205 L90 213
+                         L86 240 L65 237 Z"/>
+
+                <path class="body-part"
+                      data-part="Tangan Kanan Belakang"
+                      d="M230 213 L248 205
+                         L255 237 L234 240 Z"/>
+
+                <path class="body-part"
+                      data-part="Paha Kiri Belakang"
+                      d="M115 235 L160 235
+                         L155 330 L110 330 Z"/>
+
+                <path class="body-part"
+                      data-part="Paha Kanan Belakang"
+                      d="M160 235 L205 235
+                         L210 330 L165 330 Z"/>
+
+                <path class="body-part"
+                      data-part="Betis Kiri"
+                      d="M110 330 L155 330
+                         L150 400 L110 400 Z"/>
+
+                <path class="body-part"
+                      data-part="Betis Kanan"
+                      d="M165 330 L210 330
+                         L210 400 L170 400 Z"/>
+
+            </g>
+
+        </svg>
+
+        <div class="body-form">
+
+            <form method="POST" action="{{ url_for('body_map') }}">
+
+                <input type="hidden"
+                       name="body_side"
+                       id="bodySide"
+                       value="depan">
+
+                <input type="hidden"
+                       name="body_part"
+                       id="bodyPart">
+
+                <label>Bagian tubuh yang dipilih</label>
+
+                <input type="text"
+                       id="selectedPart"
+                       placeholder="Klik bagian tubuh di atas"
+                       readonly>
+
+                <label>Ceritakan keluhan yang dirasakan</label>
+
+                <textarea name="keluhan"
+                          placeholder="Tuliskan keluhanmu..."
+                          required></textarea>
+
+                <button type="submit" class="body-submit">
+                    Simpan Keluhan
+                </button>
+
+            </form>
+
+        </div>
+
+       <div class="body-history">
+
+    <h3>Riwayat Keluhan</h3>
+
+    {% for item in riwayat %}
+
+        <div class="body-history-item">
+
+            <strong>{{ item.body_part }}</strong>
+            ({{ item.body_side }})
+
+            <p>{{ item.keluhan }}</p>
+
+            <small>{{ item.created_at }}</small>
+
+            <div class="body-history-actions">
+
+                <a href="{{ url_for('edit_body_map', id=item.id) }}"
+                   class="btn-edit">
+                    Edit
+                </a>
+
+                <form method="POST"
+                      action="{{ url_for('hapus_body_map', id=item.id) }}"
+                      onsubmit="return confirm('Yakin ingin menghapus keluhan ini?');">
+
+                    <button type="submit" class="btn-delete">
+                        Hapus
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    {% else %}
+
+        <p>Belum ada riwayat keluhan.</p>
+
+    {% endfor %}
+
+</div>
+
+    </div>
+
+</main>
+
+<script>
+
+    let selectedElement = null;
+
+    function changeSide(side) {
+
+        document.getElementById("frontBody").style.display =
+            side === "depan" ? "block" : "none";
+
+        document.getElementById("backBody").style.display =
+            side === "belakang" ? "block" : "none";
+
+        document.getElementById("bodySide").value = side;
+
+        document.getElementById("sideTitle").textContent =
+            side === "depan" ? "Tampak Depan" : "Tampak Belakang";
+
+        document.getElementById("frontButton")
+            .classList.toggle("active", side === "depan");
+
+        document.getElementById("backButton")
+            .classList.toggle("active", side === "belakang");
+
+        clearSelection();
+    }
+
+    function clearSelection() {
+
+        if (selectedElement) {
+            selectedElement.classList.remove("selected");
+        }
+
+        selectedElement = null;
+
+        document.getElementById("bodyPart").value = "";
+        document.getElementById("selectedPart").value = "";
+    }
+
+    document.querySelectorAll(".body-part").forEach(part => {
+
+        part.addEventListener("click", function() {
+
+            clearSelection();
+
+            selectedElement = this;
+            this.classList.add("selected");
+
+            document.getElementById("bodyPart").value =
+                this.dataset.part;
+
+            document.getElementById("selectedPart").value =
+                this.dataset.part;
+
+        });
+
+    });
+
+    document.querySelector("form").addEventListener("submit", function(event) {
+
+        if (!document.getElementById("bodyPart").value) {
+            event.preventDefault();
+            alert("Silakan pilih bagian tubuh terlebih dahulu.");
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

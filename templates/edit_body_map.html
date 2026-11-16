@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Keluhan - HealthMate</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .edit-container {
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 4px 18px rgba(0,0,0,.06);
+        }
+
+        .edit-container input,
+        .edit-container select,
+        .edit-container textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 18px;
+            border: 1px solid #d5e0d9;
+            border-radius: 9px;
+            box-sizing: border-box;
+        }
+
+        .edit-container textarea {
+            min-height: 120px;
+        }
+
+        .btn-save {
+            background: #668c76;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+        }
+
+        .btn-cancel {
+            display: inline-block;
+            background: #e4eee8;
+            color: #355b49;
+            padding: 12px 20px;
+            border-radius: 9px;
+            text-decoration: none;
+            margin-left: 8px;
+        }
+
+        .error-message {
+            background: #fde8e8;
+            color: #a52d2d;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h2>HealthMate</h2>
+        <a href="{{ url_for('body_map') }}">Kembali</a>
+    </header>
+
+    <main class="edit-container">
+
+        <h2>Edit Keluhan</h2>
+
+        <p>Perbarui catatan keluhan tubuh kamu.</p>
+
+        {% if pesan_error %}
+            <div class="error-message">
+                {{ pesan_error }}
+            </div>
+        {% endif %}
+
+        <form method="POST">
+
+            <label>Tampak Tubuh</label>
+
+            <select name="body_side" required>
+                <option value="depan"
+                    {% if laporan.body_side == 'depan' %}selected{% endif %}>
+                    Tampak Depan
+                </option>
+
+                <option value="belakang"
+                    {% if laporan.body_side == 'belakang' %}selected{% endif %}>
+                    Tampak Belakang
+                </option>
+            </select>
+
+            <label>Bagian Tubuh</label>
+
+            <input type="text"
+                   name="body_part"
+                   value="{{ laporan.body_part }}"
+                   required>
+
+            <label>Keluhan</label>
+
+            <textarea name="keluhan" required>{{ laporan.keluhan }}</textarea>
+
+            <button type="submit" class="btn-save">
+                Simpan Perubahan
+            </button>
+
+            <a href="{{ url_for('body_map') }}" class="btn-cancel">
+                Batal
+            </a>
+
+        </form>
+
+    </main>
+
+</body>
+</html>

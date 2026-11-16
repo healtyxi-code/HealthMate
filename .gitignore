@@ -1,0 +1,30 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+
+# Database backup
+*.sql
+*.sql.gz
+
+# Temporary files
+*.log
+.DS_Store
+
+# File pengujian dan cadangan
+test_db.py
+app_lama.py

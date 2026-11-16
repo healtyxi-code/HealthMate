@@ -1,0 +1,630 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - HealthMate</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="dashboard-body">
+
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">✚</div>
+            <div>
+                <h2>HealthMate</h2>
+                <span>Healthy Living</span>
+            </div>
+        </div>
+
+        <p class="menu-label">MENU UTAMA</p>
+
+        <nav class="sidebar-menu">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="sidebar-link active">
+                <span>▦</span> Dashboard
+            </a>
+
+            <a href="{{ url_for('jurnal') }}"
+               class="sidebar-link">
+                <span>▤</span> Jurnal Kesehatan
+            </a>
+
+            <a href="{{ url_for('body_map') }}"
+               class="sidebar-link">
+                <span>♡</span> Body Health Map
+            </a>
+
+
+            <a href="#perkembangan"
+               class="sidebar-link">
+                <span>↗</span> Perkembangan
+            </a>
+
+            <a href="#aktivitas"
+               class="sidebar-link">
+                <span>◷</span> Aktivitas
+            </a>
+
+            <a href="#tips"
+               class="sidebar-link">
+                <span>♡</span> Tips Kesehatan
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="{{ url_for('profil') }}"
+               class="sidebar-link">
+                <span>◉</span> Profil Saya
+            </a>
+
+            <a href="{{ url_for('logout') }}"
+               class="sidebar-link logout-link"
+               onclick="return confirm('Apakah kamu yakin ingin logout?')">
+                <span>⇥</span> Logout
+            </a>
+
+        </div>
+
+        <div class="sidebar-footer">
+            <p>HealthMate © 2026</p>
+            <span>Your Health, Our Priority</span>
+        </div>
+
+    </aside>
+
+
+    <!-- KONTEN UTAMA -->
+    <main class="dashboard-main">
+
+        <!-- TOPBAR -->
+        
+<div class="dashboard-topbar">
+
+    <div>
+        
+<span class="topbar-subtitle">HEALTHMATE OVERVIEW</span>
+<h2>My Health Dashboard</h2>
+
+    </div>
+
+    <div class="user-info">
+        ...
+    </div>
+
+</div>
+ 
+<!-- SAPAAN RINGKAS -->
+<section class="dashboard-intro">
+    <div>
+        <span class="intro-label">YOUR DAILY HEALTH</span>
+        <h1>Halo, {{ nama }}! 👋</h1>
+        <p>
+            Yuk, pantau perkembangan kesehatanmu hari ini.
+            Langkah kecil untuk hidup lebih sehat dimulai dari sini.
+        </p>
+    </div>
+
+    <a href="{{ url_for('jurnal') }}" class="primary-button">
+        + Tambah Jurnal
+    </a>
+</section>
+
+
+        <!-- RINGKASAN -->
+        <section class="dashboard-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Ringkasan Kesehatan</h2>
+                    <p>Informasi kesehatan terbarumu.</p>
+                </div>
+            </div>
+
+            <div class="summary-grid">
+
+                <div class="summary-card">
+
+                    <div class="summary-icon green-icon">▤</div>
+
+                    <span class="summary-label">Total Jurnal</span>
+
+                    <h3>{{ jumlah_jurnal }}</h3>
+
+                    <p>Catatan kesehatan tersimpan</p>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon orange-icon">♡</div>
+
+                    <span class="summary-label">Berat Badan Terbaru</span>
+
+                    {% if berat_terbaru is not none %}
+                        <h3>{{ berat_terbaru }} <small>kg</small></h3>
+                    {% else %}
+                        <h3 class="no-data">Belum ada data</h3>
+                    {% endif %}
+
+                    <p>Data berat badan terakhir</p>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon blue-icon">◷</div>
+
+                    <span class="summary-label">Durasi Tidur Terbaru</span>
+
+                    {% if tidur_terbaru is not none %}
+                        <h3>{{ tidur_terbaru }} <small>jam</small></h3>
+                    {% else %}
+                        <h3 class="no-data">Belum ada data</h3>
+                    {% endif %}
+
+                    <p>Data tidur terakhir</p>
+
+                </div>
+
+
+                   <div class="summary-card">
+
+                   <div class="summary-icon orange-icon">♡</div>
+
+                   <span class="summary-label">Total Keluhan Tubuh</span>
+
+                   <h3>{{ jumlah_keluhan }}</h3>
+
+                   <p>Keluhan yang tersimpan</p>
+
+                </div>
+
+
+            </div>
+
+
+<!-- RINGKASAN BODY HEALTH MAP -->
+<div class="activity-card" style="margin-top: 20px;">
+
+    <h3>Body Health Map</h3>
+
+    {% if keluhan_terakhir %}
+
+        <p>
+            <strong>Bagian tubuh:</strong>
+            {{ keluhan_terakhir.body_part }}
+        </p>
+
+        <p>
+            <strong>Tampak tubuh:</strong>
+            {{ keluhan_terakhir.body_side|capitalize }}
+        </p>
+
+        <p>
+            <strong>Keluhan terakhir:</strong>
+            {{ keluhan_terakhir.keluhan }}
+        </p>
+
+        <p>
+            <strong>Waktu pencatatan:</strong>
+            {{ keluhan_terakhir.created_at }}
+        </p>
+
+    {% else %}
+
+        <p>Belum ada keluhan tubuh yang dicatat.</p>
+
+    {% endif %}
+
+    <a href="{{ url_for('body_map') }}" class="primary-button">
+        Buka Body Health Map
+    </a>
+
+</div>
+
+            {% if tanggal_terbaru %}
+                <p class="latest-date">
+                    Data terakhir diperbarui: {{ tanggal_terbaru }}
+                </p>
+            {% endif %}
+
+            {% if pesan_error %}
+                <p class="pesan-error">
+                    Gagal mengambil data: {{ pesan_error }}
+                </p>
+            {% endif %}
+
+        </section>
+
+
+        <!-- GRAFIK -->
+        <section id="perkembangan" class="dashboard-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Perkembangan Kesehatan</h2>
+                    <p>Pantau perubahan kesehatanmu melalui grafik.</p>
+                </div>
+            </div>
+
+            <div class="chart-grid">
+
+                <div class="chart-card">
+                    <h3>Berat Badan</h3>
+                    <p>Perkembangan berat badan (kg)</p>
+                    <div class="chart-area">
+                        <canvas id="grafikBerat"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h3>Durasi Tidur</h3>
+                    <p>Catatan waktu tidur (jam)</p>
+                    <div class="chart-area">
+                        <canvas id="grafikTidur"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- STATISTIK -->
+        <section class="dashboard-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Statistik Kesehatan</h2>
+                    <p>Rangkuman seluruh catatan kesehatanmu.</p>
+                </div>
+            </div>
+
+            <div class="summary-grid">
+
+                <div class="summary-card">
+                    <div class="summary-icon green-icon">⚖</div>
+                    <span class="summary-label">Rata-rata Berat Badan</span>
+                    <h3>{{ rata_berat }} <small>kg</small></h3>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-icon blue-icon">◷</div>
+                    <span class="summary-label">Rata-rata Durasi Tidur</span>
+                    <h3>{{ rata_tidur }} <small>jam</small></h3>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-icon orange-icon">▤</div>
+                    <span class="summary-label">Total Catatan</span>
+                    <h3>{{ jumlah_jurnal }}</h3>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- AKTIVITAS -->
+        <section id="aktivitas" class="dashboard-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Riwayat Aktivitas</h2>
+                    <p>Aktivitas yang pernah kamu catat.</p>
+                </div>
+            </div>
+
+            <div class="activity-card">
+
+                {% if daftar_aktivitas %}
+
+                    <ul class="activity-list">
+                        {% for aktivitas in daftar_aktivitas %}
+                            <li>
+                                <span class="activity-dot"></span>
+                                {{ aktivitas }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                {% else %}
+
+                    <p>Belum ada aktivitas yang dicatat.</p>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <!-- TIPS -->
+        <section id="tips" class="dashboard-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Tips Hidup Sehat</h2>
+                    <p>Kebiasaan kecil untuk menjaga kesehatan.</p>
+                </div>
+            </div>
+
+            <div class="tips-grid">
+
+                <div class="tip-card">
+                    <span>💤</span>
+                    <h3>Jaga Pola Tidur</h3>
+                    <p>Usahakan memiliki jadwal tidur yang teratur.</p>
+                </div>
+
+                <div class="tip-card">
+                    <span>💧</span>
+                    <h3>Minum Air Putih</h3>
+                    <p>Penuhi kebutuhan cairan tubuh setiap hari.</p>
+                </div>
+
+                <div class="tip-card">
+                    <span>🏃</span>
+                    <h3>Aktif Bergerak</h3>
+                    <p>Lakukan aktivitas fisik sesuai kemampuan.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <footer class="dashboard-footer">
+            <p>© 2026 HealthMate. Your Health, Our Priority.</p>
+        </footer>
+
+    </main>
+
+</div>
+
+
+<!-- SCRIPT GRAFIK -->
+
+<script>
+    // Mengambil data dari Flask
+    const tanggal = {{ tanggal | tojson }};
+    const berat = {{ berat | tojson }};
+    const tidur = {{ tidur | tojson }};
+
+    // Plugin untuk tampilan ketika belum ada data
+    const emptyStatePlugin = {
+        id: "emptyState",
+
+        afterDraw(chart) {
+            const datasets = chart.data.datasets;
+            const hasData = datasets.some(dataset =>
+                dataset.data.some(value =>
+                    value !== null && value !== undefined
+                )
+            );
+
+            if (!hasData) {
+                const { ctx, chartArea } = chart;
+
+                if (!chartArea) return;
+
+                ctx.save();
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.font = "14px Segoe UI";
+                ctx.fillStyle = "#819087";
+
+                ctx.fillText(
+                    "Belum ada data kesehatan",
+                    (chartArea.left + chartArea.right) / 2,
+                    (chartArea.top + chartArea.bottom) / 2
+                );
+
+                ctx.restore();
+            }
+        }
+    };
+
+    // Pengaturan umum grafik
+    Chart.defaults.font.family = "Segoe UI, Arial, sans-serif";
+    Chart.defaults.color = "#819087";
+
+    // ==============================
+    // GRAFIK BERAT BADAN
+    // ==============================
+
+    new Chart(document.getElementById("grafikBerat"), {
+        type: "line",
+
+        data: {
+            labels: tanggal,
+
+            datasets: [{
+                label: "Berat Badan (kg)",
+                data: berat,
+
+                borderColor: "#477A61",
+                backgroundColor: "rgba(71, 122, 97, 0.12)",
+
+                fill: true,
+                tension: 0.4,
+
+                borderWidth: 3,
+
+                pointRadius: 5,
+                pointHoverRadius: 8,
+
+                pointBackgroundColor: "#477A61",
+                pointBorderColor: "#FFFFFF",
+                pointBorderWidth: 2
+            }]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            interaction: {
+                intersect: false,
+                mode: "index"
+            },
+
+            animation: {
+                duration: 1200,
+                easing: "easeOutQuart"
+            },
+
+            plugins: {
+                legend: {
+                    display: true,
+
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20
+                    }
+                },
+
+                tooltip: {
+                    backgroundColor: "#315B46",
+                    titleColor: "#FFFFFF",
+                    bodyColor: "#FFFFFF",
+                    padding: 12,
+                    cornerRadius: 10,
+
+                    callbacks: {
+                        label: function(context) {
+                            return " Berat: " +
+                                context.parsed.y + " kg";
+                        }
+                    }
+                }
+            },
+
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                },
+
+                y: {
+                    beginAtZero: false,
+
+                    grid: {
+                        color: "#E8EEE9"
+                    },
+
+                    ticks: {
+                        padding: 10
+                    }
+                }
+            }
+        },
+
+        plugins: [emptyStatePlugin]
+    });
+
+
+    // ==============================
+    // GRAFIK DURASI TIDUR
+    // ==============================
+
+    new Chart(document.getElementById("grafikTidur"), {
+        type: "bar",
+
+        data: {
+            labels: tanggal,
+
+            datasets: [{
+                label: "Durasi Tidur (jam)",
+                data: tidur,
+
+                backgroundColor: "#DCA879",
+                hoverBackgroundColor: "#C78D5F",
+
+                borderRadius: 10,
+                borderSkipped: false,
+
+                maxBarThickness: 48
+            }]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            animation: {
+                duration: 1200,
+                easing: "easeOutQuart"
+            },
+
+            plugins: {
+                legend: {
+                    display: true,
+
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20
+                    }
+                },
+
+                tooltip: {
+                    backgroundColor: "#315B46",
+                    titleColor: "#FFFFFF",
+                    bodyColor: "#FFFFFF",
+                    padding: 12,
+                    cornerRadius: 10,
+
+                    callbacks: {
+                        label: function(context) {
+                            return " Tidur: " +
+                                context.parsed.y + " jam";
+                        }
+                    }
+                }
+            },
+
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                },
+
+                y: {
+                    beginAtZero: true,
+                    suggestedMax: 8,
+
+                    grid: {
+                        color: "#E8EEE9"
+                    },
+
+                    ticks: {
+                        stepSize: 1,
+                        padding: 10
+                    }
+                }
+            }
+        },
+
+        plugins: [emptyStatePlugin]
+    });
+
+</script>

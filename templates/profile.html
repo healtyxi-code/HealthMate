@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Profil Pengguna - HealthMate</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="profile-page">
+
+    <!-- HEADER -->
+    <header class="profile-header">
+
+        <div class="profile-brand">
+            <div class="profile-brand-icon">✚</div>
+
+            <div>
+                <h1>HealthMate</h1>
+                <p>Healthy Living</p>
+            </div>
+        </div>
+
+        <a href="{{ url_for('dashboard') }}"
+           class="profile-nav">
+            ← Dashboard
+        </a>
+
+    </header>
+
+
+    <main class="profile-container">
+
+        <!-- HERO PROFIL -->
+        <section class="profile-hero">
+
+            <div class="profile-avatar">♡</div>
+
+            <div>
+                <span class="profile-label">MY ACCOUNT</span>
+
+                <h2>Profil Pengguna</h2>
+
+                <p>
+                    Kelola informasi akun dan identitasmu
+                    di HealthMate.
+                </p>
+            </div>
+
+            <div class="profile-heart">♡</div>
+
+        </section>
+
+
+        <!-- NOTIFIKASI -->
+        {% if pesan_sukses %}
+            <div class="profile-success">
+                ✓ {{ pesan_sukses }}
+            </div>
+        {% endif %}
+
+        {% if pesan_error %}
+            <div class="profile-error">
+                {{ pesan_error }}
+            </div>
+        {% endif %}
+
+
+        <!-- INFORMASI AKUN -->
+        <section class="profile-card">
+
+            <div class="profile-card-heading">
+
+                <div class="profile-card-icon">♙</div>
+
+                <div>
+                    <h3>Informasi Akun</h3>
+                    <p>Perbarui informasi pribadi kamu.</p>
+                </div>
+
+            </div>
+
+
+            <form action="{{ url_for('profil') }}"
+                  method="POST"
+                  class="profile-form">
+
+                <label for="nama">Nama Lengkap</label>
+
+                <input
+                    type="text"
+                    id="nama"
+                    name="nama"
+                    value="{{ user.nama }}"
+                    placeholder="Masukkan nama lengkap"
+                    required
+                >
+
+
+                <label for="email">Alamat Email</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    value="{{ user.email }}"
+                    readonly
+                    class="profile-readonly"
+                >
+
+                <p class="profile-note">
+                    Email digunakan sebagai identitas akun
+                    dan tidak dapat diubah di halaman ini.
+                </p>
+
+
+                <div class="profile-actions">
+
+                    <a href="{{ url_for('dashboard') }}"
+                       class="profile-cancel">
+                        Kembali
+                    </a>
+
+                    <button type="submit"
+                            class="profile-save">
+                        ✓ Simpan Perubahan
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <p class="profile-footer">
+            HealthMate · Take care of yourself ♡
+        </p>
+
+    </main>
+
+</body>
+</html>

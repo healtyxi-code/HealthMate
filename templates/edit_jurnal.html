@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Jurnal - HealthMate</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="edit-page">
+
+    <!-- HEADER -->
+    <header class="edit-header">
+        <div class="edit-brand">
+            <div class="brand-icon">✚</div>
+            <div>
+                <h1>HealthMate</h1>
+                <p>Healthy Living</p>
+            </div>
+        </div>
+
+        <a href="{{ url_for('jurnal') }}" class="nav-kembali">
+            ← Riwayat Jurnal
+        </a>
+    </header>
+
+    <main class="edit-container">
+
+        <!-- HERO -->
+        <section class="edit-hero">
+            <div>
+                <span class="edit-label">HEALTH JOURNAL</span>
+                <h2>Edit Catatan Kesehatan</h2>
+                <p>
+                    Perbarui informasi kesehatanmu agar catatan
+                    tetap akurat dan terorganisir.
+                </p>
+            </div>
+
+            <div class="edit-heart">♡</div>
+        </section>
+
+        <!-- FORM EDIT -->
+        <section class="edit-card">
+
+            <div class="edit-card-heading">
+                <div class="edit-icon">✎</div>
+                <div>
+                    <h3>Perbarui Jurnal</h3>
+                    <p>Pastikan informasi yang kamu masukkan sudah benar.</p>
+                </div>
+            </div>
+
+            <form method="POST" class="edit-form">
+
+                <div class="edit-grid">
+
+                    <div>
+                        <label>Tanggal</label>
+                        <input type="date"
+                               name="tanggal"
+                               value="{{ jurnal.tanggal }}"
+                               required>
+                    </div>
+
+                    <div>
+                        <label>Berat Badan (kg)</label>
+                        <input type="number"
+                               name="berat"
+                               value="{{ jurnal.berat }}"
+                               step="0.1"
+                               min="0"
+                               placeholder="Contoh: 55"
+                               required>
+                    </div>
+
+                    <div>
+                        <label>Durasi Tidur (jam)</label>
+                        <input type="number"
+                               name="tidur"
+                               value="{{ jurnal.tidur }}"
+                               step="0.5"
+                               min="0"
+                               placeholder="Contoh: 8"
+                               required>
+                    </div>
+
+                </div>
+
+                <div class="edit-field">
+                    <label>Catatan Aktivitas</label>
+                    <textarea name="aktivitas"
+                              placeholder="Ceritakan aktivitasmu hari ini..."
+                              required>{{ jurnal.aktivitas }}</textarea>
+                </div>
+
+                <div class="edit-field">
+                    <label>Kondisi Kesehatan</label>
+                    <textarea name="kondisi"
+                              placeholder="Bagaimana kondisi tubuhmu hari ini?"
+                              required>{{ jurnal.kondisi }}</textarea>
+                </div>
+
+                <div class="edit-actions">
+
+                    <a href="{{ url_for('jurnal') }}"
+                       class="edit-cancel">
+                        Batal
+                    </a>
+
+                    <button type="submit" class="edit-submit">
+                        ✓ Simpan Perubahan
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+        <p class="edit-footer">
+            HealthMate · Take care of yourself ♡
+        </p>
+
+    </main>
+
+</body>
+</html>

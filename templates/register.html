@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Registrasi - HealthMate</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="auth-page">
+
+    <div class="auth-container">
+
+        <!-- BRAND HEALTHMATE -->
+        <div class="auth-brand">
+
+            <div class="auth-logo">✚</div>
+
+            <div>
+                <h2>HealthMate</h2>
+                <p>Healthy Living</p>
+            </div>
+
+        </div>
+
+
+        <!-- KARTU REGISTRASI -->
+        <div class="auth-card">
+
+            <div class="auth-illustration">
+                <span>♡</span>
+            </div>
+
+
+            <!-- JUDUL -->
+            <div class="auth-heading">
+
+                <span class="auth-label">JOIN HEALTHMATE</span>
+
+                <h1>Buat Akun Baru!</h1>
+
+                <p>
+                    Mulai perjalanan hidup sehatmu bersama HealthMate.
+                    Buat akun dan catat perkembangan kesehatanmu setiap hari.
+                </p>
+
+            </div>
+
+
+            <!-- PESAN ERROR -->
+            {% if pesan_error %}
+
+                <div class="auth-error">
+                    {{ pesan_error }}
+                </div>
+
+            {% endif %}
+
+
+            <!-- FORM REGISTRASI -->
+            <form method="POST"
+                  action="{{ url_for('register') }}">
+
+                <div class="auth-form-group">
+
+                    <label for="nama">Nama Lengkap</label>
+
+                    <input
+                        type="text"
+                        id="nama"
+                        name="nama"
+                        placeholder="Masukkan nama lengkap"
+                        autocomplete="name"
+                        required>
+
+                </div>
+
+
+                <div class="auth-form-group">
+
+                    <label for="email">Alamat Email</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Masukkan email kamu"
+                        autocomplete="email"
+                        required>
+
+                </div>
+
+
+                <div class="auth-form-group">
+
+                    <label for="password">Password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Minimal 8 karakter"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required>
+
+                </div>
+
+
+                <button type="submit" class="auth-button">
+                    Daftar Sekarang →
+                </button>
+
+            </form>
+
+
+            <!-- PEMBATAS -->
+            <div class="auth-divider">
+                <span>atau</span>
+            </div>
+
+
+            <!-- LINK LOGIN -->
+            <p class="auth-register">
+
+                Sudah punya akun?
+
+                <a href="{{ url_for('login') }}">
+                    Login di sini
+
+                </a>
+
+            </p>
+
+        </div>
+
+
+        <!-- FOOTER -->
+        <div class="auth-footer">
+            HealthMate · Take care of yourself ♡
+        </div>
+
+    </div>
+
+</body>
+</html>
